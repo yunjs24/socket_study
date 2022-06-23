@@ -45,3 +45,53 @@ const openapiSpec = swaggerJsdoc(options);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 ```
+
+
+# EC2 install git, node.js 
+
+## htop (resource monitor)
+```(zsh)
+sudo yum update -y
+sudo yum install git htop -y
+htop
+```
+```(zsh)
+mkdir ~/local
+cd local
+wget https://nodejs.org/dist/v16.15.1/node-v16.15.1-linux-x64.tar.xz
+tar xvf <download-file.tar>
+```
+~/.bash_profile 에 node 환경변수 추가
+```(zsh)
+# ~/.bash_profile
+PATH=$PATH:<node install path>/bin
+:wq!
+
+source ~/.bash_profile
+node -v
+```
+
+# Nginx 설치 및 node.js 연결
+
+### nginx 웹서버를 설치하고 reverse proxy 설정을 통해 node.js 4000번 백엔드 포트로 연결한다
+
+```
+sudo amazon-linux-extras install nginx1
+sudo vi /etc/nginx/nginx.conf
+```
+
+error_page 404 /404.html; 위에 다음 내용 삽입
+```(nginx)
+    location / {
+        sendfile off;
+	    proxy_pass              	http:127.0.0.1:4000;
+    	proxy_redirect          	default;
+    	proxy_http_version      	1.1;
+        proxy_set_header        	Host	$host;
+        proxy_set_header        	X-Real-IP	$remote_addr;
+        proxy_set_header        	X-Forwarded-For	$proxy_add_x_forwarded_for;
+        proxy_set_header        	X-Forwarded-Proto	$scheme;
+        proxy_cache_bypass			$http_upgrade;
+        proxy_max_temp_file_size	0;
+    }
+```
