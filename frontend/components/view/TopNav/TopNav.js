@@ -17,4 +17,4 @@ const TopNav = () => {
 	)
 }
 
-export default Topav
+export default TopNav
