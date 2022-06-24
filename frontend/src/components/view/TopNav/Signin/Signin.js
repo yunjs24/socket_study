@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { loginUser } from "../../../_actions/user_actions";
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Form, Icon, Input, Button, Checkbox, Typography } from 'antd';
@@ -35,77 +34,49 @@ function LoginPage(props) {
           .min(6, 'Password must be at least 6 characters')
           .required('Password is required'),
       })}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          let dataToSubmit = {
-            email: values.email,
-            password: values.password
-          };
-
-          dispatch(loginUser(dataToSubmit))
-            .then(response => {
-              if (response.payload.loginSuccess) {
-                window.localStorage.setItem('userId', response.payload.userId);
-                if (rememberMe === true) {
-                  window.localStorage.setItem('저장', values.id);
-                } else {
-                  localStorage.removeItem('저장');
-                }
-                props.history.push("/");
-              } else {
-                setFormErrorMessage('Check out your Account or Password again')
-              }
-            })
-            .catch(err => {
-              setFormErrorMessage('Check out your Account or Password again')
-              setTimeout(() => {
-                setFormErrorMessage("")
-              }, 3000);
-            });
-          setSubmitting(false);
-        }, 500);
-      }}
+    
+      
     >
       {props => {
         const {
-          values,
-          touched,
-          errors,
-          dirty,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          handleReset,
+            values,
+            touched,
+            errors,
+            dirty,
+            isSubmitting,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            handleReset,
         } = props;
         return (
-          <div className="app">
+            <div className="app">
 
-            <Title level={2}>Sign In</Title>
-            <form onSubmit={handleSubmit} style={{ width: '300px' }}>
+                <Title level={2}>Sign In</Title>
+                <form onSubmit={handleSubmit} style={{ width: '300px' }}>
 
-              <Form.Item required>
-                <Input
-                  id="email"
-                  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  placeholder="Enter your email"
-                  type="email"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.email && touched.email ? 'text-input error' : 'text-input'
-                  }
-                />
-                {errors.email && touched.email && (
-                  <div className="input-feedback">{errors.email}</div>
-                )}
-              </Form.Item>
+                <Form.Item required>
+                    <Input
+                        id="email"
+                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                        placeholder="Enter your email"
+                        type="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                            errors.email && touched.email ? 'text-input error' : 'text-input'
+                        }
+                    />
+                    {errors.email && touched.email && (
+                    <div className="input-feedback">{errors.email}</div>
+                    )}
+                </Form.Item>
 
               <Form.Item required>
                 <Input
                   id="password"
-                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  prefix={<Icon type="lock"/>}
                   placeholder="Enter your password"
                   type="password"
                   value={values.password}
